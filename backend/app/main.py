@@ -1,5 +1,5 @@
 """
-Main module backend\\main.py: run the app
+Main module backend.main: run the app
 """
 
 from fastapi import FastAPI
