@@ -7,6 +7,6 @@ from fastapi import APIRouter
 router = APIRouter()
 
 
-@router.post("/")
+@router.get("/greetings")
 def say_hello():
     return {"message": "Hello World"}
