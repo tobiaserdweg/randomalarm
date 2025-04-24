@@ -2,8 +2,8 @@
 Module backend.logic: implementation of actual functionalities
 """
 
-from datetime import datetime, time, timedelta
 import math
+from datetime import datetime, time, timedelta
 from typing import Literal
 
 import numpy as np
