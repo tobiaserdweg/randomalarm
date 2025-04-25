@@ -5,7 +5,6 @@ Unit test for functions in files in app
 from datetime import time
 
 import pytest
-
 from app.logic import simulate_alarm_times
 
 
@@ -20,6 +19,14 @@ from app.logic import simulate_alarm_times
             2,
             1,
             [time(hour=6, minute=30, second=30)],
+        ),
+        (
+            "random",
+            time(hour=6, minute=0, second=0),
+            time(hour=7, minute=0, second=0),
+            2,
+            90,
+            [time(hour=7, minute=0, second=0)],
         ),
         (
             "linear",
@@ -55,7 +62,22 @@ from app.logic import simulate_alarm_times
                 time(hour=12, minute=0, second=0),
             ],
         ),
-        # General
+    ],
+)
+def test_simulate_alarm_times_backups(
+    method, start, end, num_alarms, gap_mins, times
+):
+    """Test the function app.logic.simulate_alarm_times (back up cases)"""
+    alarms_datetimes = simulate_alarm_times(
+        method, start, end, num_alarms, gap_mins
+    )
+    alarms_times = [alarm.time() for alarm in alarms_datetimes]
+    assert alarms_times == times
+
+
+@pytest.mark.parametrize(
+    "method,start,end,num_alarms,gap_mins,times",
+    [
         (
             "linear",
             time(hour=22, minute=30, second=0),
@@ -108,3 +130,28 @@ def test_simulate_alarm_times_linear(
     )
     alarms_times = [alarm.time() for alarm in alarms_datetimes]
     assert alarms_times == times
+
+
+@pytest.mark.parametrize(
+    "start_time,end_time,num_alarms,gap_mins",
+    [
+        (time(hour=8, minute=0), time(hour=22, minute=0), 10, 30),
+    ],
+)
+def test_simulate_alarm_times_random(
+    start_time, end_time, num_alarms, gap_mins
+):
+    """Test the function app.logic.simulate_alarm_times (random mode)"""
+    for _ in range(10000):
+        alarms_datetimes = simulate_alarm_times(
+            method="random",
+            start_time=start_time,
+            end_time=end_time,
+            num_alarms=num_alarms,
+            gap_mins=gap_mins,
+        )
+
+        for t1, t2 in zip(alarms_datetimes, alarms_datetimes[1:]):
+            assert t1 < t2, f"Test error: {t2} is not later than {t1}."
+        assert alarms_datetimes[0].time() >= start_time
+        assert alarms_datetimes[num_alarms - 1].time() <= end_time

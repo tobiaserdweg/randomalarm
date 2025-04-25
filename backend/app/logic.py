@@ -61,15 +61,18 @@ def simulate_alarm_times(
                 ]
                 return alarm_datetimes
             else:
-                available_seconds = (
-                    total_seconds - (num_alarms - 1) * 60 * gap_mins
-                )
-                random_addonds = sorted(
-                    np.random.uniform(0, available_seconds, num_alarms)
-                )
-                alarm_datetimes = [
-                    start_datetime
-                    + timedelta(seconds=addon + k * 60 * gap_mins)
-                    for k, addon in enumerate(random_addonds)
-                ]
+                alarm_datetimes = []
+                current_time = start_datetime
+                for k in range(num_alarms):
+                    rem_seconds = (
+                        end_datetime - current_time
+                    ).total_seconds() - (num_alarms - k - 1) * 60 * gap_mins
+                    seconds_addon = np.random.uniform(
+                        60 * gap_mins, rem_seconds
+                    )
+                    current_time += timedelta(
+                        seconds=math.floor(seconds_addon)
+                    )
+                    alarm_datetimes.append(current_time)
+
                 return alarm_datetimes

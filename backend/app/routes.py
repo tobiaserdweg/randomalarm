@@ -23,5 +23,6 @@ def generate_alarms(req: AlarmRequest) -> AlarmResponse:
         start_time=req.start_time,
         end_time=req.end_time,
         num_alarms=req.num_alarms,
+        gap_mins=req.gap_mins,
     )
     return AlarmResponse(alarms=alarm_datetimes)

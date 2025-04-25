@@ -12,7 +12,8 @@ class AlarmRequest(BaseModel):
     method: Literal["random", "linear"]
     start_time: time
     end_time: time
-    num_alarms: int = Field(..., ge=0)
+    num_alarms: int = Field(..., ge=1)
+    gap_mins: int = Field(..., ge=0)
 
 
 class AlarmResponse(BaseModel):
