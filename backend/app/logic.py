@@ -1,5 +1,5 @@
 """
-Module backend.logic: implementation of actual functionalities
+Module backend.app.logic: implementation of actual functionalities
 """
 
 import math

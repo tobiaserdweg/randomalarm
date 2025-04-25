@@ -1,5 +1,5 @@
 """
-Module backend.api.schemas: definition of schemata
+Module backend.app.schemas: definition of schemata
 """
 
 from datetime import time, datetime

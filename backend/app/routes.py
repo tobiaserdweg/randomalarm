@@ -1,5 +1,5 @@
 """
-Module backend.api.routes: routing functions
+Module backend.app.routes: routing functions
 """
 
 from fastapi import APIRouter
