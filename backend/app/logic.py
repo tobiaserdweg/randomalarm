@@ -14,17 +14,19 @@ def simulate_alarm_times(
     start_time: time,
     end_time: time,
     num_alarms: int,
+    gap_mins: int,
 ) -> list[datetime]:
     """
     Derive the times at which the alarm is triggered by the app. If method is
     linear, then the alarm times are equally distributed over to given time
     interval. Otherwise, the times are sampled randomly. The alarm is triggered
-    no more than once every minute.
+    no more than once every gap_mins minutes.
 
     :param method: method to derive alarm times
     :param start_time: start of the time slot
     :param end_time: start of the time slot
     :param num_alarms: number of alarams to be generated
+    :param gap_mins: minimal time gap between alarms (in minutes)
     :return: list of datetime.datetime objects
     """
     # Derive start and end time as datetime objects
@@ -36,8 +38,8 @@ def simulate_alarm_times(
 
     total_seconds = (end_datetime - start_datetime).total_seconds()
     total_minutes = int(total_seconds / 60)
-    if num_alarms > total_minutes:
-        num_alarms = math.floor(total_minutes)
+    if num_alarms > total_minutes / gap_mins:
+        num_alarms = math.floor(total_minutes / gap_mins)
 
     # In case the time slot is too short, only one alarm time is triggered
     if method not in ["linear", "random"]:
@@ -46,7 +48,7 @@ def simulate_alarm_times(
             f"backend.app.logic.simulate_alarm_times: method = {method}"
         )
     else:
-        if start_datetime + timedelta(minutes=1) > end_datetime:
+        if start_datetime + timedelta(minutes=gap_mins) > end_datetime:
             return [end_datetime]
         else:
             if method == "linear":
@@ -59,12 +61,15 @@ def simulate_alarm_times(
                 ]
                 return alarm_datetimes
             else:
-                available_seconds = total_seconds - (num_alarms - 1) * 60
+                available_seconds = (
+                    total_seconds - (num_alarms - 1) * 60 * gap_mins
+                )
                 random_addonds = sorted(
                     np.random.uniform(0, available_seconds, num_alarms)
                 )
                 alarm_datetimes = [
-                    start_datetime + timedelta(seconds=addon + k * 60)
+                    start_datetime
+                    + timedelta(seconds=addon + k * 60 * gap_mins)
                     for k, addon in enumerate(random_addonds)
                 ]
                 return alarm_datetimes
