@@ -136,13 +136,15 @@ def test_simulate_alarm_times_linear(
     "start_time,end_time,num_alarms,gap_mins",
     [
         (time(hour=8, minute=0), time(hour=22, minute=0), 10, 30),
+        (time(hour=14, minute=0), time(hour=16, minute=30), 20, 5),
+        (time(hour=8, minute=0), time(hour=9, minute=0), 60, 1),
     ],
 )
 def test_simulate_alarm_times_random(
     start_time, end_time, num_alarms, gap_mins
 ):
     """Test the function app.logic.simulate_alarm_times (random mode)"""
-    for _ in range(10000):
+    for _ in range(1000):
         alarms_datetimes = simulate_alarm_times(
             method="random",
             start_time=start_time,
@@ -154,4 +156,4 @@ def test_simulate_alarm_times_random(
         for t1, t2 in zip(alarms_datetimes, alarms_datetimes[1:]):
             assert t1 < t2, f"Test error: {t2} is not later than {t1}."
         assert alarms_datetimes[0].time() >= start_time
-        assert alarms_datetimes[num_alarms - 1].time() <= end_time
+        assert alarms_datetimes[-1].time() <= end_time

@@ -61,18 +61,26 @@ def simulate_alarm_times(
                 ]
                 return alarm_datetimes
             else:
-                alarm_datetimes = []
-                current_time = start_datetime
-                for k in range(num_alarms):
-                    rem_seconds = (
-                        end_datetime - current_time
-                    ).total_seconds() - (num_alarms - k - 1) * 60 * gap_mins
-                    seconds_addon = np.random.uniform(
-                        60 * gap_mins, rem_seconds
-                    )
-                    current_time += timedelta(
-                        seconds=math.floor(seconds_addon)
-                    )
-                    alarm_datetimes.append(current_time)
+                shifts = np.sort(
+                    np.random.uniform(0, total_seconds, size=num_alarms)
+                )
+                alarm_datetimes = [
+                    start_datetime + timedelta(seconds=math.floor(shift))
+                    for shift in shifts
+                ]
 
+                for k in range(1, num_alarms, 1):
+                    delta = (
+                        alarm_datetimes[k] - alarm_datetimes[k - 1]
+                    ).total_seconds()
+                    if delta <= gap_mins * 60:
+                        shift = timedelta(seconds=gap_mins * 60 - delta)
+                        for j in range(k, num_alarms, 1):
+                            alarm_datetimes[j] += shift
+
+                # Cap and derivation of unique values
+                alarm_datetimes = [
+                    min(alarm, end_datetime) for alarm in alarm_datetimes
+                ]
+                alarm_datetimes = sorted(list(set(alarm_datetimes)))
                 return alarm_datetimes
