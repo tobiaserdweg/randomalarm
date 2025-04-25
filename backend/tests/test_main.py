@@ -138,6 +138,7 @@ def test_simulate_alarm_times_linear(
         (time(hour=8, minute=0), time(hour=22, minute=0), 10, 30),
         (time(hour=14, minute=0), time(hour=16, minute=30), 20, 5),
         (time(hour=8, minute=0), time(hour=9, minute=0), 60, 1),
+        (time(hour=8, minute=0), time(hour=9, minute=0), 60, 5),
     ],
 )
 def test_simulate_alarm_times_random(
