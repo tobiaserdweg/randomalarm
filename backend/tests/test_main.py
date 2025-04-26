@@ -2,8 +2,9 @@
 Unit test for functions in files in app
 """
 
-from datetime import time
+from datetime import time, datetime
 
+import numpy as np
 import pytest
 from app.logic import simulate_alarm_times
 
@@ -141,7 +142,7 @@ def test_simulate_alarm_times_linear(
         (time(hour=8, minute=0), time(hour=9, minute=0), 60, 5),
     ],
 )
-def test_simulate_alarm_times_random(
+def test_simulate_alarm_times_random_base(
     start_time, end_time, num_alarms, gap_mins
 ):
     """Test the function app.logic.simulate_alarm_times (random mode)"""
@@ -158,3 +159,45 @@ def test_simulate_alarm_times_random(
             assert t1 < t2, f"Test error: {t2} is not later than {t1}."
         assert alarms_datetimes[0].time() >= start_time
         assert alarms_datetimes[-1].time() <= end_time
+
+
+@pytest.mark.parametrize(
+    "start_time,end_time,num_alarms,gap_mins",
+    [
+        (time(hour=10, minute=0), time(hour=13, minute=0), 2, 1),
+        (time(hour=22, minute=0), time(hour=2, minute=0), 3, 1),
+    ],
+)
+def test_simulate_alarm_times_random_lln(
+    start_time, end_time, num_alarms, gap_mins
+):
+    """
+    Test the function app.logic.simulate_alarm_times (random mode)
+    Idea: On average (by LLN) the time points should be distributed uniformly
+    about the specified time interval.
+    """
+    np.random.seed(42)
+    num_its = 1000
+    today = datetime.today().date()
+    start_datetime = datetime.combine(today, start_time)
+    deltas_actual = np.array([0.0 for _ in range(num_alarms)])
+
+    for _ in range(num_its):
+        alarms_datetimes = simulate_alarm_times(
+            method="random",
+            start_time=start_time,
+            end_time=end_time,
+            num_alarms=num_alarms,
+            gap_mins=gap_mins,
+        )
+        deltas_tmp = np.array(
+            [
+                (alarm - start_datetime).total_seconds()
+                for alarm in alarms_datetimes
+            ]
+        )
+        deltas_actual += deltas_tmp
+
+    deltas_actual *= 1 / num_its
+    deltas_expected = [k * (60**2) for k in range(1, num_alarms + 1, 1)]
+    np.testing.assert_allclose(deltas_actual, deltas_expected, rtol=1e-2)
