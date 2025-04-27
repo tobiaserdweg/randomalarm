@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "backend"
+version = "0.9"
+description = "Implementation of backend functionalities for the random alarm app"
+authors = ["Tobias Erdweg <erdweg.tobias@googlemail.com>"]
+readme = "README.md"
+keywords = ["random alarm", "random time", "pain"]
+
+packages = [
+  { include = "app" }
+]
+
+[tool.poetry.urls]
+Homepage = "https://github.com/tobiaserdweg/randomalarm/tree/main/backend"
+Repository = "https://github.com/tobiaserdweg/randomalarm/tree/main/backend"
+
+[tool.poetry.dependencies]
+python = "^3.13"
+fastapi = "^0.115.12"
+numpy = "^2.0.2"
+pandas = "^2.2.3"
+pydantic = "^2.11.3"
+pydantic-core = "^2.33.1"
+uvicorn = "^0.34.2"
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+flake8 = "^7.2.0"
+pytest = "^8.3.5"
+pytest-mock = "^3.14.0"
+
+[tool.black]
+line-length = 79
+target-version = ["py313"]
+skip-string-normalization = false
