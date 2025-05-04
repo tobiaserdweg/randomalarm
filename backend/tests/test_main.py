@@ -4,11 +4,18 @@ Unit test for functions in files in app
 
 from datetime import time, datetime
 
+from fastapi.testclient import TestClient
 import numpy as np
 import pytest
 
 from app.logic import simulate_alarm_times, simulate_mult_problem
+from app.main import app
+from app.routes import generate_alarms
 
+
+#########################
+# Functions from app.logic
+#########################
 
 @pytest.mark.parametrize(
     "method, start, end, num_alarms, gap_mins, times",
@@ -235,3 +242,39 @@ def test_simulate_mult_problem(num_attempts, base_difficulty, expected_range):
     assert all(
         low <= x < high for x in result
     ), f"Values should be between {low} and {high - 1}"
+
+
+#########################
+# Functions from app.routes
+#########################
+def test_generate_alarms():
+    """Test the function app.routes.generate_alarms"""
+    client = TestClient(app)
+    params = {
+        "method": "random",
+        "start_time": "22:00",
+        "end_time": "06:00",
+        "num_alarms": 5,
+        "gap_mins": 10,
+    }
+    response = client.post("/simulate-alarms", json=params)
+
+    assert response.status_code == 200
+    data = response.json()
+    assert isinstance(data["alarms"], list)
+    assert len(data["alarms"]) == params["num_alarms"]
+
+
+def test_generate_mult():
+    """Test the function app.routes.generate_mult"""
+    client = TestClient(app)
+    params = {
+        "num_attempts": 0,
+        "base_difficulty": "moderate",
+    }
+    response = client.post("/simulate-multiplication", json=params)
+
+    assert response.status_code == 200
+    data = response.json()
+    assert isinstance(data["value_one"], int)
+    assert isinstance(data["value_two"], int)
