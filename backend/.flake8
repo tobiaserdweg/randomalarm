@@ -1,5 +1,5 @@
 [flake8]
 extend-ignore = E203
-exclude = .git,__pycache__,.pytest_cache,build,.venv
+exclude = .venv,__pycache__,build,dist,.pytest_cache,.idea
 max-complexity = 10
 max-line-length = 79
