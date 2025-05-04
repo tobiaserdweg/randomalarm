@@ -18,3 +18,13 @@ class AlarmRequest(BaseModel):
 
 class AlarmResponse(BaseModel):
     alarms: list[datetime]
+
+
+class MultProblemRequest(BaseModel):
+    num_attempts: int = Field(..., ge=0)
+    base_difficulty: Literal["easy", "moderate", "hard"]
+
+
+class MultProblemResponse(BaseModel):
+    value_one: int = Field(..., ge=1, le=1000)
+    value_two: int = Field(..., ge=1, le=1000)

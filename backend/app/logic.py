@@ -84,3 +84,24 @@ def simulate_alarm_times(
                 ]
                 alarm_datetimes = sorted(list(set(alarm_datetimes)))
                 return alarm_datetimes
+
+
+def simulate_mult_problem(
+    num_attempts: int, base_difficulty: Literal["easy", "moderate", "hard"]
+) -> tuple[int, int]:
+    """
+    Simulate a multiplication problem.
+
+    :param num_attempts: number of previous attempts
+    :param base_difficulty: base difficulty
+    :return: list of two integers to be multiplied
+    """
+    difficulty_dict = {"easy": 1, "moderate": 2, "hard": 3}
+    difficulty_int = difficulty_dict[base_difficulty]
+
+    # Derive difficulty to be applied
+    adjustment = 2 if num_attempts >= 3 else 1 if num_attempts in (1, 2) else 0
+    difficulty_int = min(3, difficulty_int + adjustment)
+
+    low, high = {1: (1, 11), 2: (11, 101), 3: (101, 1001)}[difficulty_int]
+    return tuple(np.random.randint(low=low, high=high, size=2).tolist())
