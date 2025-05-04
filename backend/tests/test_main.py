@@ -10,12 +10,12 @@ import pytest
 
 from app.logic import simulate_alarm_times, simulate_mult_problem
 from app.main import app
-from app.routes import generate_alarms
 
 
 #########################
 # Functions from app.logic
 #########################
+
 
 @pytest.mark.parametrize(
     "method, start, end, num_alarms, gap_mins, times",

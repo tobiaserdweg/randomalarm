@@ -2,6 +2,8 @@
 Module backend.app.routes: routing functions
 """
 
+import logging
+
 from fastapi import APIRouter
 
 from .logic import simulate_alarm_times, simulate_mult_problem
@@ -11,6 +13,12 @@ from .schemas import (
     MultProblemRequest,
     MultProblemResponse,
 )
+
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(funcName)s - %(message)s",
+    level=logging.INFO,
+)
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -30,6 +38,12 @@ def generate_alarms(req: AlarmRequest) -> AlarmResponse:
         num_alarms=req.num_alarms,
         gap_mins=req.gap_mins,
     )
+
+    logger.info(
+        f"Request params: method={req.method}, start_time={req.start_time}, "
+        f"end_time={req.end_time}, num_alarms={req.num_alarms}, gap_mins={req.gap_mins}. "
+        f"Response: alarm_datetimes={alarm_datetimes}."
+    )
     return AlarmResponse(alarms=alarm_datetimes)
 
 
@@ -43,6 +57,11 @@ def generate_mult(req: MultProblemRequest) -> MultProblemResponse:
     """
     multiplicators = simulate_mult_problem(
         num_attempts=req.num_attempts, base_difficulty=req.base_difficulty
+    )
+
+    logger.info(
+        f"Request params: num_attempts={req.num_attempts}, base_difficulty={req.base_difficulty}. "
+        f"Response: multiplicators={multiplicators}."
     )
     return MultProblemResponse(
         value_one=multiplicators[0], value_two=multiplicators[1]
