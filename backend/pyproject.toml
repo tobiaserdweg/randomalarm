@@ -15,7 +15,7 @@ Homepage = "https://github.com/tobiaserdweg/randomalarm/tree/main/backend"
 Repository = "https://github.com/tobiaserdweg/randomalarm/tree/main/backend"
 
 [tool.poetry.dependencies]
-python = "^3.13"
+python = "^3.11"
 fastapi = "^0.115.12"
 httpx = "^0.28.1"
 numpy = "^2.0.2"
