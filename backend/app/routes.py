@@ -39,13 +39,16 @@ def generate_alarms(req: AlarmRequest) -> AlarmResponse:
         gap_mins=req.gap_mins,
     )
 
+    alarm_datetimes_str = [
+        dt.strftime("%Y-%m-%d %H:%M:%S") for dt in alarm_datetimes
+    ]
     logger.info(
         f"Request params: method={req.method}, "
         f"start_time={req.start_time}, "
         f"end_time={req.end_time}, "
         f"num_alarms={req.num_alarms}, "
         f"gap_mins={req.gap_mins}. "
-        f"Response: alarm_datetimes={alarm_datetimes}."
+        f"Response: alarm_datetimes={alarm_datetimes_str}."
     )
     return AlarmResponse(alarms=alarm_datetimes)
 

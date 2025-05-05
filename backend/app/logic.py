@@ -38,6 +38,7 @@ def simulate_alarm_times(
 
     total_seconds = (end_datetime - start_datetime).total_seconds()
     total_minutes = int(total_seconds / 60)
+    # TODO: add error handling for gap_mins = 0
     if num_alarms > total_minutes / gap_mins:
         num_alarms = math.floor(total_minutes / gap_mins)
 
