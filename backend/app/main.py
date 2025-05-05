@@ -12,6 +12,7 @@ from .routes import router
 app = FastAPI(title=__title__)
 app.add_middleware(
     CORSMiddleware,
+    # TODO: add path to API once deployed in render
     allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
