@@ -40,8 +40,11 @@ def generate_alarms(req: AlarmRequest) -> AlarmResponse:
     )
 
     logger.info(
-        f"Request params: method={req.method}, start_time={req.start_time}, "
-        f"end_time={req.end_time}, num_alarms={req.num_alarms}, gap_mins={req.gap_mins}. "
+        f"Request params: method={req.method}, "
+        f"start_time={req.start_time}, "
+        f"end_time={req.end_time}, "
+        f"num_alarms={req.num_alarms}, "
+        f"gap_mins={req.gap_mins}. "
         f"Response: alarm_datetimes={alarm_datetimes}."
     )
     return AlarmResponse(alarms=alarm_datetimes)
@@ -60,7 +63,8 @@ def generate_mult(req: MultProblemRequest) -> MultProblemResponse:
     )
 
     logger.info(
-        f"Request params: num_attempts={req.num_attempts}, base_difficulty={req.base_difficulty}. "
+        f"Request params: num_attempts={req.num_attempts}, "
+        f"base_difficulty={req.base_difficulty}. "
         f"Response: multiplicators={multiplicators}."
     )
     return MultProblemResponse(
