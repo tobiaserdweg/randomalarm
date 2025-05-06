@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "backend"
-version = "0.9"
+version = "1.0"
 description = "Implementation of backend functionalities for the random alarm app"
 authors = ["Tobias Erdweg <erdweg.tobias@googlemail.com>"]
 readme = "README.md"

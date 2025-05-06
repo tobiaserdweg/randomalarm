@@ -1,25 +1,37 @@
 # RandomAlarm Backend
 
-Backend API for the iOS app **Random Alarm**, where random alarms are 
-generated in a user-defined time period. User have to solve math problems 
-to stop the alarms.
+Python backend for the iOS app **Random alarm**.
 
-## Features
+The backend is in charge of
 
-- Generates random alarm times within a specified daily time range
-- Math challenges required to dismiss the alarm
-- FastAPI-powered REST API
-- Data validation using Pydantic
-- Unit tested with Pytest
-- Swift-compatible (CORS configured)
+- generating a sequence of random times given the user defined parametrization
+  (start and end time, number of alarms, minimum time distance between alarms),
+- generating math problems of user defined difficulty.
 
-## 🧪 Local Development
+The backend is implemented as an API using the Python library fastapi. The API
+is deployed on **render.com**.
 
-```bash
-# Clone & install dependencies
-git clone https://github.com/tobiaserdweg/randomalarm.git
-cd randomalarm/backend
+# Local development set up
+
+First, clone the code. To do this, open the git cmd, cd to the local directory 
+in which you want to run the application and execute
+
+```
+git clone "https://github.com/tobiaserdweg/randomalarm"
+```
+
+Ensure that poetry is installed in your global Python environment. Open the 
+Windows powershell and create a virtual environment by executing
+
+```
 poetry install
+```
 
-# Run the server locally
-poetry run uvicorn main:app --reload
+In order to run application, cd to the folder *backend* and execute the 
+following command
+
+```
+poetry run uvicorn app.main:app --reload
+```
+
+Open *http://127.0.0.1:8000/docs* in your browser and test the API.
