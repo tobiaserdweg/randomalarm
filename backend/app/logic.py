@@ -100,8 +100,13 @@ def simulate_mult_problem(
     difficulty_int = difficulty_dict[base_difficulty]
 
     # Derive difficulty to be applied
-    adjustment = 2 if num_attempts >= 3 else 1 if num_attempts in (1, 2) else 0
+    if difficulty_int == 1:
+        adjustment = (
+            2 if num_attempts >= 3 else 1 if num_attempts in (1, 2) else 0
+        )
+    else:
+        adjustment = 1 if num_attempts >= 2 else 0
     difficulty_int = min(3, difficulty_int + adjustment)
 
-    low, high = {1: (1, 11), 2: (11, 101), 3: (101, 1001)}[difficulty_int]
+    low, high = {1: (2, 13), 2: (5, 26), 3: (20, 101)}[difficulty_int]
     return tuple(np.random.randint(low=low, high=high, size=2).tolist())
