@@ -1,4 +1,4 @@
-# RandomAlarm Backend
+# Random alarm backend
 
 Python backend for the iOS app **Random alarm**.
 
